@@ -293,6 +293,318 @@
     ('((lambda (_.0) 5) _.1) (=/= ((_.0 closure))) (num _.1) (sym _.0))
     ((cdr '(_.0 . 5)) (absento (closure _.0)))))
 
+(test "interp-4"
+  (run 6 (q)
+    (eval-expo
+     `(((((lambda (Y)
+            (lambda (F)
+              (F (lambda (x) (((Y Y) F) x))))) 
+          (lambda (Y)
+            (lambda (F)
+              (F (lambda (x) (((Y Y) F) x))))))
+         (lambda (eval-expr)
+           (lambda (expr)
+             (lambda (env)
+               (if (number? expr)
+                   expr
+                   (if (symbol? expr)
+                       (env expr)
+                       (if (and (pair? expr)
+                                (and (pair? (cdr expr))
+                                     (and (pair? (cdr (cdr expr)))
+                                          (and (null? (cdr (cdr (cdr expr))))
+                                               (and (equal? (car expr) (quote lambda))
+                                                    (and (pair? (car (cdr expr)))
+                                                         (and (null? (cdr (car (cdr expr))))
+                                                              (symbol? (car (car (cdr expr)))))))))))
+                           (lambda (a)
+                             ((eval-expr (car (cdr (cdr expr))))
+                              (lambda (y)
+                                (if (equal? (car (car (cdr expr))) y)
+                                    a
+                                    (env y)))))
+                           (if (and (pair? expr)
+                                    (and (pair? (cdr expr))
+                                         (null? (cdr (cdr expr)))))
+                               (((eval-expr (car expr)) env)
+                                ((eval-expr (car (cdr expr))) env))
+                               (error (quote unmatched-expression-error))))))))))
+        ,q)
+       (lambda (x) (error (quote unbound-variable-error))))
+     '()
+     5))
+  '(5
+    '5
+    ((car '(5 . _.0)) (absento (closure _.0)))
+    ('((lambda (_.0) 5) _.1) (=/= ((_.0 closure))) (num _.1) (sym _.0))
+    ((cdr '(_.0 . 5)) (absento (closure _.0)))
+    ('((lambda (_.0) _.0) 5) (=/= ((_.0 closure))) (sym _.0))))
+
+(test "interp-5"
+  (run 7 (q)
+    (eval-expo
+     `(((((lambda (Y)
+            (lambda (F)
+              (F (lambda (x) (((Y Y) F) x))))) 
+          (lambda (Y)
+            (lambda (F)
+              (F (lambda (x) (((Y Y) F) x))))))
+         (lambda (eval-expr)
+           (lambda (expr)
+             (lambda (env)
+               (if (number? expr)
+                   expr
+                   (if (symbol? expr)
+                       (env expr)
+                       (if (and (pair? expr)
+                                (and (pair? (cdr expr))
+                                     (and (pair? (cdr (cdr expr)))
+                                          (and (null? (cdr (cdr (cdr expr))))
+                                               (and (equal? (car expr) (quote lambda))
+                                                    (and (pair? (car (cdr expr)))
+                                                         (and (null? (cdr (car (cdr expr))))
+                                                              (symbol? (car (car (cdr expr)))))))))))
+                           (lambda (a)
+                             ((eval-expr (car (cdr (cdr expr))))
+                              (lambda (y)
+                                (if (equal? (car (car (cdr expr))) y)
+                                    a
+                                    (env y)))))
+                           (if (and (pair? expr)
+                                    (and (pair? (cdr expr))
+                                         (null? (cdr (cdr expr)))))
+                               (((eval-expr (car expr)) env)
+                                ((eval-expr (car (cdr expr))) env))
+                               (error (quote unmatched-expression-error))))))))))
+        ,q)
+       (lambda (x) (error (quote unbound-variable-error))))
+     '()
+     5))
+  '(5
+    '5
+    ((car '(5 . _.0)) (absento (closure _.0)))
+    ('((lambda (_.0) 5) _.1) (=/= ((_.0 closure))) (num _.1) (sym _.0))
+    ((cdr '(_.0 . 5)) (absento (closure _.0)))
+    ('((lambda (_.0) _.0) 5) (=/= ((_.0 closure))) (sym _.0))
+    ('((lambda (_.0) 5) (lambda (_.1) _.2)) (=/= ((_.0 closure)) ((_.1 closure))) (sym _.0 _.1) (absento (closure _.2)))))
+
+(test "interp-6"
+  (run 8 (q)
+    (eval-expo
+     `(((((lambda (Y)
+            (lambda (F)
+              (F (lambda (x) (((Y Y) F) x))))) 
+          (lambda (Y)
+            (lambda (F)
+              (F (lambda (x) (((Y Y) F) x))))))
+         (lambda (eval-expr)
+           (lambda (expr)
+             (lambda (env)
+               (if (number? expr)
+                   expr
+                   (if (symbol? expr)
+                       (env expr)
+                       (if (and (pair? expr)
+                                (and (pair? (cdr expr))
+                                     (and (pair? (cdr (cdr expr)))
+                                          (and (null? (cdr (cdr (cdr expr))))
+                                               (and (equal? (car expr) (quote lambda))
+                                                    (and (pair? (car (cdr expr)))
+                                                         (and (null? (cdr (car (cdr expr))))
+                                                              (symbol? (car (car (cdr expr)))))))))))
+                           (lambda (a)
+                             ((eval-expr (car (cdr (cdr expr))))
+                              (lambda (y)
+                                (if (equal? (car (car (cdr expr))) y)
+                                    a
+                                    (env y)))))
+                           (if (and (pair? expr)
+                                    (and (pair? (cdr expr))
+                                         (null? (cdr (cdr expr)))))
+                               (((eval-expr (car expr)) env)
+                                ((eval-expr (car (cdr expr))) env))
+                               (error (quote unmatched-expression-error))))))))))
+        ,q)
+       (lambda (x) (error (quote unbound-variable-error))))
+     '()
+     5))
+  '(5
+    '5
+    ((car '(5 . _.0)) (absento (closure _.0)))
+    ('((lambda (_.0) 5) _.1) (=/= ((_.0 closure))) (num _.1) (sym _.0))
+    ((cdr '(_.0 . 5)) (absento (closure _.0)))
+    ('((lambda (_.0) _.0) 5) (=/= ((_.0 closure))) (sym _.0))
+    ('((lambda (_.0) 5) (lambda (_.1) _.2)) (=/= ((_.0 closure)) ((_.1 closure))) (sym _.0 _.1) (absento (closure _.2)))
+    ((car '(((lambda (_.0) 5) _.1) . _.2)) (=/= ((_.0 closure))) (num _.1) (sym _.0) (absento (closure _.2)))))
+
+(test "interp-7"
+  (run 9 (q)
+    (eval-expo
+     `(((((lambda (Y)
+            (lambda (F)
+              (F (lambda (x) (((Y Y) F) x))))) 
+          (lambda (Y)
+            (lambda (F)
+              (F (lambda (x) (((Y Y) F) x))))))
+         (lambda (eval-expr)
+           (lambda (expr)
+             (lambda (env)
+               (if (number? expr)
+                   expr
+                   (if (symbol? expr)
+                       (env expr)
+                       (if (and (pair? expr)
+                                (and (pair? (cdr expr))
+                                     (and (pair? (cdr (cdr expr)))
+                                          (and (null? (cdr (cdr (cdr expr))))
+                                               (and (equal? (car expr) (quote lambda))
+                                                    (and (pair? (car (cdr expr)))
+                                                         (and (null? (cdr (car (cdr expr))))
+                                                              (symbol? (car (car (cdr expr)))))))))))
+                           (lambda (a)
+                             ((eval-expr (car (cdr (cdr expr))))
+                              (lambda (y)
+                                (if (equal? (car (car (cdr expr))) y)
+                                    a
+                                    (env y)))))
+                           (if (and (pair? expr)
+                                    (and (pair? (cdr expr))
+                                         (null? (cdr (cdr expr)))))
+                               (((eval-expr (car expr)) env)
+                                ((eval-expr (car (cdr expr))) env))
+                               (error (quote unmatched-expression-error))))))))))
+        ,q)
+       (lambda (x) (error (quote unbound-variable-error))))
+     '()
+     5))
+  '(5
+    '5
+    ((car '(5 . _.0)) (absento (closure _.0)))
+    ('((lambda (_.0) 5) _.1) (=/= ((_.0 closure))) (num _.1) (sym _.0))
+    ((cdr '(_.0 . 5)) (absento (closure _.0)))
+    ('((lambda (_.0) _.0) 5) (=/= ((_.0 closure))) (sym _.0))
+    ('((lambda (_.0) 5) (lambda (_.1) _.2)) (=/= ((_.0 closure)) ((_.1 closure))) (sym _.0 _.1) (absento (closure _.2)))
+    ((car '(((lambda (_.0) 5) _.1) . _.2)) (=/= ((_.0 closure))) (num _.1) (sym _.0) (absento (closure _.2)))
+    ((car '(((lambda (_.0) _.0) 5) . _.1)) (=/= ((_.0 closure))) (sym _.0) (absento (closure _.1)))))
+
+(test "interp-8"
+  ;; Some of these answers are really interesting.  For example, consider the 8th answer:
+  ;;
+  ;; ((car '(((lambda (_.0) 5) _.1) . _.2)) (=/= ((_.0 closure))) (num _.1) (sym _.0) (absento (closure _.2)))
+  ;;
+  ;; The expression being evaluated is:
+  ;;
+  ;; (car '(((lambda (_.0) 5) _.1) . _.2))
+  ;;
+  ;; However, this expression is evaluated at the level of the Scheme
+  ;; interpreter written in miniKanren, which includes 'car'.  The
+  ;; Scheme interpreter evaluates this expression to
+  ;;
+  ;; ((lambda (_.0) 5) _.1)
+  ;;
+  ;; where _.1 is constrained to be a symbol and _.1 is constrained to
+  ;; be a number.  This expression, in turn, is passed to the Scheme
+  ;; interpreter written in Scheme, which evaluates it to 5.
+  
+  (run 10 (q)
+    (eval-expo
+     `(((((lambda (Y)
+            (lambda (F)
+              (F (lambda (x) (((Y Y) F) x))))) 
+          (lambda (Y)
+            (lambda (F)
+              (F (lambda (x) (((Y Y) F) x))))))
+         (lambda (eval-expr)
+           (lambda (expr)
+             (lambda (env)
+               (if (number? expr)
+                   expr
+                   (if (symbol? expr)
+                       (env expr)
+                       (if (and (pair? expr)
+                                (and (pair? (cdr expr))
+                                     (and (pair? (cdr (cdr expr)))
+                                          (and (null? (cdr (cdr (cdr expr))))
+                                               (and (equal? (car expr) (quote lambda))
+                                                    (and (pair? (car (cdr expr)))
+                                                         (and (null? (cdr (car (cdr expr))))
+                                                              (symbol? (car (car (cdr expr)))))))))))
+                           (lambda (a)
+                             ((eval-expr (car (cdr (cdr expr))))
+                              (lambda (y)
+                                (if (equal? (car (car (cdr expr))) y)
+                                    a
+                                    (env y)))))
+                           (if (and (pair? expr)
+                                    (and (pair? (cdr expr))
+                                         (null? (cdr (cdr expr)))))
+                               (((eval-expr (car expr)) env)
+                                ((eval-expr (car (cdr expr))) env))
+                               (error (quote unmatched-expression-error))))))))))
+        ,q)
+       (lambda (x) (error (quote unbound-variable-error))))
+     '()
+     5))
+  '(5
+    '5
+    ((car '(5 . _.0)) (absento (closure _.0)))
+    ('((lambda (_.0) 5) _.1) (=/= ((_.0 closure))) (num _.1) (sym _.0))
+    ((cdr '(_.0 . 5)) (absento (closure _.0)))
+    ('((lambda (_.0) _.0) 5) (=/= ((_.0 closure))) (sym _.0))
+    ('((lambda (_.0) 5) (lambda (_.1) _.2)) (=/= ((_.0 closure)) ((_.1 closure))) (sym _.0 _.1) (absento (closure _.2)))
+    ((car '(((lambda (_.0) 5) _.1) . _.2)) (=/= ((_.0 closure))) (num _.1) (sym _.0) (absento (closure _.2)))
+    ((car '(((lambda (_.0) _.0) 5) . _.1)) (=/= ((_.0 closure))) (sym _.0) (absento (closure _.1)))
+    ('((lambda (_.0) ((lambda (_.1) 5) _.2)) _.3) (=/= ((_.0 closure)) ((_.1 closure))) (num _.2 _.3) (sym _.0 _.1))))
+
+(test "force-1"
+  ;; use 'quote' to force the programs to be evaluated entirely in the
+  ;; Scheme interpreter, not the miniKanren interpreter (other than
+  ;; the evaluation of the quote form in the miniKanren interpreter,
+  ;; of course)
+  (run 4 (q)
+    (eval-expo
+     `(((((lambda (Y)
+            (lambda (F)
+              (F (lambda (x) (((Y Y) F) x))))) 
+          (lambda (Y)
+            (lambda (F)
+              (F (lambda (x) (((Y Y) F) x))))))
+         (lambda (eval-expr)
+           (lambda (expr)
+             (lambda (env)
+               (if (number? expr)
+                   expr
+                   (if (symbol? expr)
+                       (env expr)
+                       (if (and (pair? expr)
+                                (and (pair? (cdr expr))
+                                     (and (pair? (cdr (cdr expr)))
+                                          (and (null? (cdr (cdr (cdr expr))))
+                                               (and (equal? (car expr) (quote lambda))
+                                                    (and (pair? (car (cdr expr)))
+                                                         (and (null? (cdr (car (cdr expr))))
+                                                              (symbol? (car (car (cdr expr)))))))))))
+                           (lambda (a)
+                             ((eval-expr (car (cdr (cdr expr))))
+                              (lambda (y)
+                                (if (equal? (car (car (cdr expr))) y)
+                                    a
+                                    (env y)))))
+                           (if (and (pair? expr)
+                                    (and (pair? (cdr expr))
+                                         (null? (cdr (cdr expr)))))
+                               (((eval-expr (car expr)) env)
+                                ((eval-expr (car (cdr expr))) env))
+                               (error (quote unmatched-expression-error))))))))))
+        (quote ,q))
+       (lambda (x) (error (quote unbound-variable-error))))
+     '()
+     5))
+  '(5
+    (((lambda (_.0) 5) _.1) (=/= ((_.0 closure))) (num _.1) (sym _.0))
+    (((lambda (_.0) _.0) 5) (=/= ((_.0 closure))) (sym _.0))
+    (((lambda (_.0) 5) (lambda (_.1) _.2)) (=/= ((_.0 closure)) ((_.1 closure))) (sym _.0 _.1) (absento (closure _.2)))))
+
 (test "meta-interp-3"
   (run 5 (q)
     (eval-expo
@@ -302,6 +614,11 @@
   '(5 '5 ((car '(5 . _.0)) (absento (closure _.0))) ((cdr '(_.0 . 5)) (absento (closure _.0))) (and #t 5)))
 
 (test "interp-bogus-1"
+  ;; This run* expression should fail.  Shows the need for the calls
+  ;; to 'error', which is undefined, and therefore results in failure.
+  ;; Originally we returned a symbol representing an unbound variable
+  ;; error, or unmatched expression; however, this results in bogus
+  ;; expressions returning symbols, which are valid data.
   (run* (q)
     (eval-expo
      '(((((lambda (Y)

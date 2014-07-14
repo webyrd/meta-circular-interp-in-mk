@@ -1,0 +1,7 @@
+Add to the relational Scheme interpreter in miniKanren:
+
+* pattern matching, a la pmatch
+
+* letrec
+
+* multiple-arity lambda and application

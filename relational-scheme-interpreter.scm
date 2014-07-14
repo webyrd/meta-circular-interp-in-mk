@@ -70,6 +70,8 @@
 (define eval-expo
   (lambda (exp env val)
     (conde
+      ;; leave 'error' unbound, so calls to 'error' will cause failure
+      ;;
       ((== #f exp) (== #f val))      
       ((== #t exp) (== #t val))
       ((numbero exp) (== exp val))
@@ -146,7 +148,7 @@
          (conde
            [(symbolo v) (== #t val)]
            [(non-symbol-valueo v) (== #f val)])
-         (eval-expo e env v)))      
+         (eval-expo e env v)))
       ((symbolo exp) (lookupo exp env val))
       ((fresh (rator rand x body env^ a)
          (== `(,rator ,rand) exp)

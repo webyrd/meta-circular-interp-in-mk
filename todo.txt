@@ -5,3 +5,13 @@ Add to the relational Scheme interpreter in miniKanren:
 * letrec
 
 * multiple-arity lambda and application
+
+
+
+Add to the Scheme interpreter in Scheme, running inside the Scheme interpreter in miniKanren:
+
+* list
+
+* quote
+
+Can it generate quines?

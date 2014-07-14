@@ -1,4 +1,6 @@
-Add to the relational Scheme interpreter in miniKanren:
+Try adding these to the relational Scheme interpreter in miniKanren,
+to simplify the Scheme interpreter in Scheme running under the
+relational interpreter:
 
 * pattern matching, a la pmatch
 
@@ -6,12 +8,23 @@ Add to the relational Scheme interpreter in miniKanren:
 
 * multiple-arity lambda and application
 
+* multiple-arity 'and' (probably don't need 'and' at all if we implement pattern matching)
 
+Hopefully these changes will speed up the Scheme-in-Scheme
+interpreter.  Can use running the quine program forward as a proxy for
+performance.  Starting point:
 
-Add to the Scheme interpreter in Scheme, running inside the Scheme interpreter in miniKanren:
-
-* list
-
-* quote
-
-Can it generate quines?
+> Testing "quine-forward-1"
+running stats for (test "quine-forward-1" (run 1 (q) (eval-expo `(((((lambda (Y) (lambda (F) (F (lambda (x) (((Y Y) F) x))))) (lambda (Y) (lambda (F) (F (lambda (x) (((Y Y) F) x)))))) (lambda (eval-expr) (lambda (expr) (lambda (env) (if (symbol? expr) (env expr) (if (and (pair? expr) (and (equal? (car expr) 'quote) (and (pair? (cdr expr)) (null? (cdr (cdr expr)))))) (car (cdr expr)) (if (and (pair? expr) (and (equal? (car expr) 'cons) (and (pair? (cdr expr)) (and (pair? (cdr (cdr expr))) (null? (cdr (cdr (cdr expr)))))))) (cons ((eval-expr (car (cdr expr))) env) ((eval-expr (car (cdr (cdr expr)))) env)) (if (and (pair? expr) (and (equal? (car expr) 'lambda) (and (pair? (cdr expr)) (and (pair? (cdr (cdr expr))) (and (null? (cdr (cdr (cdr expr)))) (and (pair? (car (cdr expr))) (and (null? (cdr (car (cdr expr)))) (symbol? (car (car (cdr expr))))))))))) (lambda (a) ((eval-expr (car (cdr (cdr expr)))) (lambda (y) (if (equal? (car (car (cdr expr))) y) a (env y))))) (if (and (pair? expr) (and (pair? (cdr expr)) (null? (cdr (cdr expr))))) (((eval-expr (car expr)) env) ((eval-expr (car (cdr expr))) env)) (error 'unmatched-expression-error)))))))))) '((lambda (x) (cons x (cons (cons 'quote (cons x '())) '()))) '(lambda (x) (cons x (cons (cons 'quote (cons x '())) '()))))) (lambda (x) (error 'unbound-variable-error))) '() q)) '(((lambda (x) (cons x (cons (cons 'quote (cons x '())) '()))) '(lambda (x) (cons x (cons (cons 'quote (cons x '())) '())))))):
+    13 collections
+    51503 ms elapsed cpu time, including 2 ms collecting
+    51510 ms elapsed real time, including 2 ms collecting
+    111452656 bytes allocated
+#t
+> Testing "quine-forward-2"
+running stats for (test "quine-forward-2" (run 1 (q) (== '((lambda (x) (cons x (cons (cons 'quote (cons x '())) '()))) '(lambda (x) (cons x (cons (cons 'quote (cons x '())) '())))) q) (eval-expo `(((((lambda (Y) (lambda (F) (F (lambda (x) (((Y Y) F) x))))) (lambda (Y) (lambda (F) (F (lambda (x) (((Y Y) F) x)))))) (lambda (eval-expr) (lambda (expr) (lambda (env) (if (symbol? expr) (env expr) (if (and (pair? expr) (and (equal? (car expr) 'quote) (and (pair? (cdr expr)) (null? (cdr (cdr expr)))))) (car (cdr expr)) (if (and (pair? expr) (and (equal? (car expr) 'cons) (and (pair? (cdr expr)) (and (pair? (cdr (cdr expr))) (null? (cdr (cdr (cdr expr)))))))) (cons ((eval-expr (car (cdr expr))) env) ((eval-expr (car (cdr (cdr expr)))) env)) (if (and (pair? expr) (and (equal? (car expr) 'lambda) (and (pair? (cdr expr)) (and (pair? (cdr (cdr expr))) (and (null? (cdr (cdr (cdr expr)))) (and (pair? (car (cdr expr))) (and (null? (cdr (car (cdr expr)))) (symbol? (car (car (cdr expr))))))))))) (lambda (a) ((eval-expr (car (cdr (cdr expr)))) (lambda (y) (if (equal? (car (car (cdr expr))) y) a (env y))))) (if (and (pair? expr) (and (pair? (cdr expr)) (null? (cdr (cdr expr))))) (((eval-expr (car expr)) env) ((eval-expr (car (cdr expr))) env)) (error 'unmatched-expression-error)))))))))) ',q) (lambda (x) (error 'unbound-variable-error))) '() q)) '(((lambda (x) (cons x (cons (cons 'quote (cons x '())) '()))) '(lambda (x) (cons x (cons (cons 'quote (cons x '())) '())))))):
+    13 collections
+    50483 ms elapsed cpu time, including 2 ms collecting
+    50489 ms elapsed real time, including 2 ms collecting
+    110727376 bytes allocated
+#t
